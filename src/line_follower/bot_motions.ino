@@ -17,20 +17,20 @@ void setup() {
 
 void bot_stop(int speed) {
   // Motor 1 
-  analogWrite(motor1_in1, speed);
-  analogWrite(motor1_in2, 0);
-  // Motor 2
-  analogWrite(motor2_in1, speed);
-  analogWrite(motor2_in2, 0);
-}
-
-void bot_forward()) {
-  // Motor 1 
   analogWrite(motor1_in1, 0);
   analogWrite(motor1_in2, 0);
   // Motor 2
   analogWrite(motor2_in1, 0);
   analogWrite(motor2_in2, 0);
+}
+
+void bot_forward()) {
+  // Motor 1 
+  analogWrite(motor1_in1, speed);
+  analogWrite(motor1_in2, 0);
+  // Motor 2
+  analogWrite(motor2_in1, 0);
+  analogWrite(motor2_in2, speed);
 }
 
 void bot_backwards(int speed) {
@@ -38,8 +38,8 @@ void bot_backwards(int speed) {
   analogWrite(motor1_in2, speed);
   analogWrite(motor1_in1, 0);
   // Motor 2
-  analogWrite(motor2_in2, speed);
-  analogWrite(motor2_in1, 0);
+  analogWrite(motor2_in1, speed);
+  analogWrite(motor2_in2, 0);
 }
 
 void bot_clockwise() {
@@ -56,8 +56,8 @@ void bot_counterclockwise() {
   analogWrite(motor1_in1, 0);
   analogWrite(motor1_in2, 0);
   // Motor 2
-  analogWrite(motor2_in1, 127);
-  analogWrite(motor2_in2, 0);
+  analogWrite(motor2_in1, 0);
+  analogWrite(motor2_in2, 127);
 }
 
 void bot_turnRight(int turn_radius) {
@@ -68,8 +68,8 @@ void bot_turnRight(int turn_radius) {
     analogWrite(motor1_in1, 255);
     analogWrite(motor1_in2, 0);
     // Motor 2
-    analogWrite(motor2_in1, 127);
-    analogWrite(motor2_in2, 0);
+    analogWrite(motor2_in1, 0);
+    analogWrite(motor2_in2, 127);
     timer++;
   }
 }
@@ -82,8 +82,8 @@ void bot_turnLeft(int turn_radius) {
     analogWrite(motor1_in1, 127);
     analogWrite(motor1_in2, 0);
     // Motor 2
-    analogWrite(motor2_in1, 255);
-    analogWrite(motor2_in2, 0);
+    analogWrite(motor2_in1, 0);
+    analogWrite(motor2_in2, 255);
     timer++;
   }
 }
