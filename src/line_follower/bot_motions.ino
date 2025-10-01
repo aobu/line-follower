@@ -5,15 +5,6 @@ int motor1_in1 = 5;
 int motor1_in2 = 6;
 int motor2_in1 = 9;
 int motor2_in2 = 10;
-void setup() {
-  // put your setup code here, to run once:
-  pinMode(motor1_in1, OUTPUT);
-  pinMode(motor1_in2, OUTPUT);
-  pinMode(motor2_in1, OUTPUT);
-  pinMode(motor2_in2, OUTPUT);
-  pinMode(motor1_en12_pin, OUTPUT);
-  pinMode(motor2_en34_pin, OUTPUT);
-}
 
 void bot_stop() {
   // Motor 1 
@@ -86,35 +77,4 @@ void bot_turnLeft(int turn_radius) {
     analogWrite(motor2_in2, 255);
     timer++;
   }
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(motor1_en12_pin, HIGH); // turns on enable for motor 1
-  digitalWrite(motor2_en34_pin, HIGH); // turns on enable for motor 2
-
-  // Call other functions to move bot
-  bot_forward(200);
-  delay(2000);
-  bot_stop();
-  delay(2000);
-  bot_backwards(200);
-  delay(2000);
-  bot_stop();
-  delay(2000);
-  bot_clockwise();
-  delay(2000);
-  bot_stop();
-  delay(2000);
-  bot_counterclockwise();
-  delay(2000);
-  bot_stop();
-  delay(2000);
-  bot_turnRight(10);
-  delay(2000);
-  bot_stop();
-  delay(2000);
-  bot_turnLeft(10);
-  delay(2000);
-  bot_stop();
 }

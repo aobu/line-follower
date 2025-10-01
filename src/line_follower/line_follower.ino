@@ -141,26 +141,3 @@ void handleButton() {
   prev_button_reading = reading;
 }
 
-// ARDUINO SETUP AND LOOP ===============================================
-void setup() {
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  pinMode(LED_PIN, OUTPUT);
-
-  Serial.begin(115200);
-  delay(100);
-
-  ensureWiFi();
-  ensureWebSocket();
-
-  Serial.println("Ready.");
-}
-
-void loop() {
-  ensureWiFi();
-  ensureWebSocket();
-
-  handleWebSocketMessages();
-  handleButton();
-
-  delay(2);
-}
