@@ -1,166 +1,96 @@
+int motor1_en12_pin;
+int motor2_en34_pin;
+
+int motor1_in1 = 3;
+int motor1_in2 = 5;
+
+const int BUTTON_PIN = 2;
+int state = 1;
+int prev_button_reading = HIGH;
+int reading = HIGH;
+
 #include <ArduinoHttpClient.h>
 #include <WiFi.h>
-#include <string.h>
 
-// PINES/STATE ===========================================================
-const int BUTTON_PIN = 2;
-const int LED_PIN = LED_BUILTIN;
-
-int state = 1;                 // valid range: 1..7
-int prev_button_reading = HIGH;
-
-// WIFI/WEBSOCKET ========================================================
+/////// WiFi Settings ///////
 char ssid[] = "tufts_eecs";
 char pass[] = "foundedin1883";
 
-char serverAddress[] = "34.28.153.91";
+char serverAddress[] = "34.28.153.91";  // server address
 int port = 80;
 
 WiFiClient wifi;
 WebSocketClient client = WebSocketClient(wifi, serverAddress, port);
+String clientID = "YOUR_ID_HERE";
+int status = WL_IDLE_STATUS;
+int count = 0;
 
-String clientID = "828BD9E1B7C7"; // ON CANVAS
-int wifiStatus = WL_IDLE_STATUS;
-unsigned long lastWSRetry = 0;
-const unsigned long wsRetryInterval = 3000; // ms
+void setup() {
+  // put your setup code here, to run once:
+  // pinMode(motor1_in1, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_BUILTIN, OUTPUT);
 
-// HELPERS ===============================================================
-void flashLED(int times, int onMs = 120, int offMs = 120) {
-  for (int i = 0; i < times; i++) {
-    digitalWrite(LED_PIN, HIGH);
-    delay(onMs);
-    digitalWrite(LED_PIN, LOW);
-    delay(offMs);
-  }
-}
+  Serial.begin(9600);
+  while ( status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to Network named: ");
+    Serial.println(ssid);                   // print the network name (SSID);
 
-void setState(int newState, bool indicate = true) {
-  // clamp to 1..7
-  if (newState < 1) newState = 1;
-  if (newState > 7) newState = 7;
-  state = newState;
-  if (indicate) flashLED(state);
-}
-
-void bumpState() {
-  state = (state % 7) + 1;   // 1..7 wrap
-  flashLED(state);
-}
-
-bool ensureWiFi() {
-  if (WiFi.status() == WL_CONNECTED) return true;
-
-  Serial.print("Connecting to WiFi SSID: ");
-  Serial.println(ssid);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    WiFi.begin(ssid, pass);
-    unsigned long start = millis();
-    while (millis() - start < 2500) {
-      delay(10);
-      if (WiFi.status() == WL_CONNECTED) break;
-    }
+    // Connect to WPA/WPA2 network:
+    status = WiFi.begin(ssid, pass);
   }
 
-  Serial.print("WiFi connected. IP: ");
-  Serial.println(WiFi.localIP());
-  return true;
+  // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your WiFi shield's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
 }
 
-bool ensureWebSocket() {
-  if (client.connected()) return true;
+void loop() {
 
-  unsigned long now = millis();
-  if (now - lastWSRetry < wsRetryInterval) return false;
-  lastWSRetry = now;
-
-  Serial.println("Opening WebSocket...");
+  // start Websocket Client
+  Serial.println("starting WebSocket client");
   client.begin();
-
-  // identify this client
   client.beginMessage(TYPE_TEXT);
   client.print(clientID);
   client.endMessage();
 
-  if (client.connected()) {
-    flashLED(2, 60, 60);
-    Serial.println("WebSocket connected.");
-    return true;
-  } else {
-    Serial.println("WebSocket connect failed.");
-    return false;
-  }
-}
-
-// SERVER COMMANDS: ONLY ACCEPT SPECIFIC 1..7 ======================
-void handleWebSocketMessages() {
-  int msgSize = client.parseMessage();
-  if (msgSize <= 0) return;
-
-  String raw = client.readString();
-  raw.trim();
-  if (raw.startsWith(String("WebClient_828BD9E1B7C7"))) {
-    raw.remove(0, String("WebClient_828BD9E1B7C7").length());
+  while (client.connected()) {
+    // what do you want to do while connected to the client?
   }
 
-  if (raw.length() > 0 && raw[0] == '.') {
-    raw.remove(0, 1); // remove .
-  }
+  Serial.println("disconnected");
 
-  bool allDigits = true;
-  for (int i = 0; i < raw.length(); i++) {
-    if (!isDigit(raw[i])) {
-      allDigits = false;
-      break;
+  reading = digitalRead(BUTTON_PIN);
+
+  if (prev_button_reading == HIGH && reading == LOW) { // if its resting and the reading changes then increment the state:
+    state++;
+    state = state % 7;
+
+    // flash led stat times
+    for (int i = 1; i < state + 1; i++) {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(200);
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(200);
     }
-  }
-
-  if (allDigits) {
-    int n = raw.toInt();
-    if (n >= 1 && n <= 7) {
-      setState(n);
-      return;
-    }
-  }
-
-  // Reject everything else
-  client.beginMessage(TYPE_TEXT);
-  client.print("ERR expected a number 1-7, got: ");
-  client.print(raw);
-  client.endMessage();
-}
-
-// BUTTON HANDLING  ======================================================
-void handleButton() {
-  int reading = digitalRead(BUTTON_PIN);
-
-  if (prev_button_reading == HIGH && reading == LOW) {
-    bumpState();      // only physical button increments
-    delay(150);       // simple debounce
+    delay(500); // wait a little between presses
   }
   prev_button_reading = reading;
-}
 
-// ARDUINO SETUP AND LOOP ===============================================
-void setup() {
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  pinMode(LED_PIN, OUTPUT);
-
-  Serial.begin(115200);
-  delay(100);
-
-  ensureWiFi();
-  ensureWebSocket();
-
-  Serial.println("Ready.");
-}
-
-void loop() {
-  ensureWiFi();
-  ensureWebSocket();
-
-  handleWebSocketMessages();
-  handleButton();
-
-  delay(2);
+  // put your main code here, to run repeatedly:
+  //digitalWrite(motor1_in1_pin, HIGH);  // turn the LED on (HIGH is the voltage level)
+  // analogWrite(motor1_in1, 127);
+  // analogWrite(motor1_in2, 0);
+  // delay(5000);
+  // analogWrite(motor1_in2, 127);
+  // analogWrite(motor1_in1, 0);
+  // delay(5000);
+  // delay(10);                      // wait for a second
+  // digitalWrite(motor1_in1_pin, LOW);   // turn the LED off by making the voltage LOW
+  // delay(1);
 }
