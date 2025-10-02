@@ -1,5 +1,6 @@
 void setup() {
   Serial.begin(9600);
+  setState(STOP);
 
   //IR LED Setup
   pinMode(ledPin, OUTPUT);
@@ -30,9 +31,14 @@ void setup() {
 }
 
 void loop() {
+  ensureWiFi();
+  ensureWebSocket();
+
+  handleWebSocketMessages();
+  runStateMachine(); 
   //ir led test
-  read_sensor();
-  delay(500);
+  //read_sensor();
+  //delay(500);
 
   // // put your main code here, to run repeatedly:
   // bot_forward(200);

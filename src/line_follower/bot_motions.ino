@@ -51,30 +51,18 @@ void bot_counterclockwise() {
   analogWrite(motor2_in2, 127);
 }
 
-void bot_turnRight(int turn_radius) {
-  int time_run = turn_radius * 100;
-  int timer = 0;
-  
-  while(timer != time_run) {
-    analogWrite(motor1_in1, 255);
-    analogWrite(motor1_in2, 0);
-    // Motor 2
-    analogWrite(motor2_in1, 0);
-    analogWrite(motor2_in2, 127);
-    timer++;
-  }
+void bot_turnRight() {  
+  analogWrite(motor1_in1, 255);
+  analogWrite(motor1_in2, 0);
+  // Motor 2
+  analogWrite(motor2_in1, 0);
+  analogWrite(motor2_in2, 127);
 }
 
-void bot_turnLeft(int turn_radius) {
-  int time_run = turn_radius * 100;
-  int timer = 0;
-  
-  while(timer != time_run) {
-    analogWrite(motor1_in1, 127);
-    analogWrite(motor1_in2, 0);
-    // Motor 2
-    analogWrite(motor2_in1, 0);
-    analogWrite(motor2_in2, 255);
-    timer++;
-  }
+void bot_turnLeft() {
+  analogWrite(motor1_in1, 127);
+  analogWrite(motor1_in2, 0);
+  // Motor 2
+  analogWrite(motor2_in1, 0);
+  analogWrite(motor2_in2, 255);
 }

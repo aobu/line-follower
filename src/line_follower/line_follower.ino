@@ -6,7 +6,7 @@
 const int BUTTON_PIN = 2;
 const int LED_PIN = LED_BUILTIN;
 
-int state = 1;                 // valid range: 1..7
+//int state = 1;                 // valid range: 1..7
 int prev_button_reading = HIGH;
 
 // WIFI/WEBSOCKET ========================================================
@@ -24,6 +24,62 @@ int wifiStatus = WL_IDLE_STATUS;
 unsigned long lastWSRetry = 0;
 const unsigned long wsRetryInterval = 3000; // ms
 
+// BOT-MOPTIONS STATE MACHINE =================================================
+enum MotionState : uint8_t {
+  STOP = 1,
+  FORWARD  = 2,
+  BACKWARD = 3,
+  CLOCKWISE = 4,
+  COUNTERCLOCKWISE = 5,
+  ARC_RIGHT = 6,
+  ARC_LEFT  = 7
+};
+
+MotionState state = STOP;  
+
+const uint8_t SPEED_FAST = 200;   // 0..255
+const uint8_t SPEED_SLOW = 120;   // 0..255
+const unsigned long TURN_MS = 900; // ms; arc duration for states 6/7
+
+// time current state
+unsigned long stateStartMs = 0;
+
+void runStateMachine() {
+  unsigned long now = millis();
+  switch (state) {
+    case STOP:
+      bot_stop();
+      break;
+
+    case FORWARD:
+      bot_forward(SPEED_FAST);
+      break;
+
+    case BACKWARD:
+      bot_backwards(SPEED_FAST);
+      break;
+
+    case CLOCKWISE:
+      bot_clockwise();
+      break;
+
+    case COUNTERCLOCKWISE:
+      bot_counterclockwise();
+      break;
+
+    case ARC_RIGHT:
+      bot_turnRight();
+      if (now - stateStartMs >= TURN_MS) setState(STOP);
+      break;
+
+    case ARC_LEFT:
+      bot_turnLeft();
+      if (now - stateStartMs >= TURN_MS) setState(STOP);
+      break;
+  }
+}
+
+
 // HELPERS ===============================================================
 void flashLED(int times, int onMs = 120, int offMs = 120) {
   for (int i = 0; i < times; i++) {
@@ -34,17 +90,16 @@ void flashLED(int times, int onMs = 120, int offMs = 120) {
   }
 }
 
-void setState(int newState, bool indicate = true) {
-  // clamp to 1..7
+void setState(int newState) {
   if (newState < 1) newState = 1;
   if (newState > 7) newState = 7;
-  state = newState;
-  if (indicate) flashLED(state);
+  state = static_cast<MotionState>(newState);
+  stateStartMs = millis();
 }
 
 void bumpState() {
-  state = (state % 7) + 1;   // 1..7 wrap
-  flashLED(state);
+  int next = (static_cast<int>(state) % 7) + 1; // 1..7 wrap
+  setState(next);
 }
 
 bool ensureWiFi() {
@@ -108,7 +163,7 @@ void handleWebSocketMessages() {
   }
 
   bool allDigits = true;
-  for (int i = 0; i < raw.length(); i++) {
+  for (int i = 0; i < raw.len gth(); i++) {
     if (!isDigit(raw[i])) {
       allDigits = false;
       break;
