@@ -31,8 +31,13 @@ void setup() {
 
 void loop() {
   //ir led test
-  read_sensor();
-  delay(500);
+  if (read_sensor() < 800){
+    bot_forward(255);
+
+  }
+  else {
+    bot_stop();
+  }
 
   // // put your main code here, to run repeatedly:
   // bot_forward(200);
