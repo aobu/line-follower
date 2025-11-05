@@ -2,6 +2,11 @@
 #include <WiFi.h>
 #include <string.h>
 
+bool sequenceStarted = false;
+unsigned long selfMoveUntil = 0;
+bool wsCommandJustSet = false;
+int lastReceivedCommand = 0;
+
 // PINES/STATE ===========================================================
 const int BUTTON_PIN = 2;
 const int LED_PIN = LED_BUILTIN;
@@ -20,6 +25,8 @@ WiFiClient wifi;
 WebSocketClient client = WebSocketClient(wifi, serverAddress, port);
 
 String clientID = "828BD9E1B7C7"; // ON CANVAS
+String partnerID = "4A9EDB0160D5";
+
 int wifiStatus = WL_IDLE_STATUS;
 unsigned long lastWSRetry = 0;
 const unsigned long wsRetryInterval = 3000; // ms
@@ -147,23 +154,42 @@ bool ensureWebSocket() {
   }
 }
 
-// SERVER COMMANDS: ONLY ACCEPT SPECIFIC 1..7 ======================
+// SIMPLE SENDER: send a plain number 1..7 ===============================
+void sendNumber(int n) {
+  client.beginMessage(TYPE_TEXT);
+  client.print(n);
+  client.endMessage();
+}
+
+// SERVER COMMANDS: ONLY ACCEPT SPECIFIC 1..7 ============================
 void handleWebSocketMessages() {
   int msgSize = client.parseMessage();
   if (msgSize <= 0) return;
 
   String raw = client.readString();
   raw.trim();
-  if (raw.startsWith(String("WebClient_828BD9E1B7C7"))) {
-    raw.remove(0, String("WebClient_828BD9E1B7C7").length());
+
+  // strip prefix if present
+  if (raw.startsWith(String("WebClient_") + clientID) || raw.startsWith(String("WebClient_") + partnerID)) {
+    raw.remove(0, String("WebClient_").length() + clientID.length());
+  }
+
+  if (raw.startsWith(clientID) || raw.startsWith(partnerID)) {
+    raw.remove(0, clientID.length());
+  }
+
+
+  if (raw.startsWith("_")) {
+    raw.remove(0, 5);
   }
 
   if (raw.length() > 0 && raw[0] == '.') {
     raw.remove(0, 1); // remove .
   }
+  
 
   bool allDigits = true;
-  for (int i = 0; i < raw.len gth(); i++) {
+  for (int i = 0; i < raw.length(); i++) {
     if (!isDigit(raw[i])) {
       allDigits = false;
       break;
@@ -174,15 +200,32 @@ void handleWebSocketMessages() {
     int n = raw.toInt();
     if (n >= 1 && n <= 7) {
       setState(n);
+      flashLED(n);
+      lastReceivedCommand = n;     // NEW
+      wsCommandJustSet = true;     // NEW
       return;
     }
   }
 
-  // Reject everything else
+  //Reject everything else
+  // client.beginMessage(TYPE_TEXT);
+  // client.print("ERR expected a number 1-7, got: ");
+  // client.print(raw);
+  // client.endMessage();
+}
+
+void sendToPartner(const String &payload) {
+  if (!client.connected()) return;
   client.beginMessage(TYPE_TEXT);
-  client.print("ERR expected a number 1-7, got: ");
-  client.print(raw);
+  //client.print("WebClient_");
+  //client.print(partnerID);
+  //client.print(".");
+  client.print(payload);
   client.endMessage();
+}
+
+void sendState() {
+  sendToPartner(String(static_cast<int>(state)));  // send 1..7
 }
 
 // BUTTON HANDLING  ======================================================
@@ -195,4 +238,3 @@ void handleButton() {
   }
   prev_button_reading = reading;
 }
-

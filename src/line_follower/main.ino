@@ -4,7 +4,7 @@ void setup() {
 
   //IR LED Setup
   pinMode(ledPin, OUTPUT);
-  analogWrite(ledPin, 255);   // 0-255 (128 ≈ 50%)
+  analogWrite(ledPin, 255);  // 0-255 (128 ≈ 50%)
 
   //Motor Setup
   pinMode(motor1_in1, OUTPUT);
@@ -14,8 +14,8 @@ void setup() {
   pinMode(motor1_en12_pin, OUTPUT);
   pinMode(motor2_en34_pin, OUTPUT);
 
-  digitalWrite(motor1_en12_pin, HIGH); // turns on enable for motor 1
-  digitalWrite(motor2_en34_pin, HIGH); // turns on enable for motor 2
+  digitalWrite(motor1_en12_pin, HIGH);  // turns on enable for motor 1
+  digitalWrite(motor2_en34_pin, HIGH);  // turns on enable for motor 2
 
 
   //Websocket Setup
@@ -26,55 +26,43 @@ void setup() {
 
   ensureWiFi();
   ensureWebSocket();
-
-
 }
 
 void loop() {
   ensureWiFi();
   ensureWebSocket();
 
+  // ========================== WE ARE BOT 1
+
+
+  // // // Kick off the sequence as Bot 1:
+  // if (!sequenceStarted && client.connected()) {
+  //   flashLED(3, 120, 120);  // Bot 1 flashes LED
+  //   sendToPartner("bot 2 can go from bot 1");     // ask Bot 2 to go FORWARD (state=2) for 5s
+  //   sequenceStarted = true;
+  // }
+
+  // // If Bot 2 tells us to go forward, run for 5 seconds then stop.
+  // if (wsCommandJustSet) {
+  //   wsCommandJustSet = false;
+  //   if (lastReceivedCommand == FORWARD) {
+  //     selfMoveUntil = millis() + 5000UL;
+  //   }
+  // }
+
+  // // Enforce the 5s local move window for Bot 1
+  // if (selfMoveUntil && millis() > selfMoveUntil) {
+  //   setState(STOP);
+  //   selfMoveUntil = 0;
+  // }
+
+
+
+  // ========================== WE ARE BOT 2
+
+
+
   handleWebSocketMessages();
-  runStateMachine(); 
-  //ir led test
-  if (read_sensor() < 800){
-    bot_forward(255);
+  runStateMachine();
 
-  }
-  else {
-    bot_stop();
-  }
-
-  // // put your main code here, to run repeatedly:
-  // bot_forward(200);
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_backwards(200);
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_clockwise();
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_counterclockwise();
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_turnRight(10);
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_turnLeft(10);
-  // delay(2000);
-  // bot_stop();
-
-  // ensureWiFi();
-  // ensureWebSocket();
-
-  // handleWebSocketMessages();
-  // handleButton();
-
-  // delay(2);
 }
