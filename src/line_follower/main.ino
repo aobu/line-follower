@@ -17,6 +17,9 @@ void setup() {
   digitalWrite(motor1_en12_pin, HIGH);  // turns on enable for motor 1
   digitalWrite(motor2_en34_pin, HIGH);  // turns on enable for motor 2
 
+  // Color Sensor Setup
+  pinMode(red, OUTPUT);
+  pinMode(blue, OUTPUT);
 
   //Websocket Setup
   pinMode(BUTTON_PIN, INPUT_PULLUP);
