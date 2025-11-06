@@ -27,26 +27,17 @@ void setup() {
 
   delay(100);
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   ensureWiFi();
   ensureWebSocket();
-=======
-=======
->>>>>>> Stashed changes
+
   // ensureWiFi();
   // ensureWebSocket();
 
-
->>>>>>> Stashed changes
 }
 
 void loop() {
   // ensureWiFi();
   // ensureWebSocket();
-<<<<<<< Updated upstream
-
-<<<<<<< Updated upstream
   // ========================== WE ARE BOT 1
 
 
