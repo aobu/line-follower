@@ -29,17 +29,17 @@ void color_sensing() {
   blue_reading2 = analogRead(pr2);
   // Print Blue
   Serial.print("resistor2 blue: ");
-  Serial.println(blue_reading);
+  Serial.println(blue_reading1);
   delay(50);
 
   digitalWrite(red, LOW);
   digitalWrite(blue, LOW);
 
   // Only print reading 1
-  lande_decider(blue_reading1, read_reading1);
+  lane_decider(blue_reading1, red_reading1);
 }
 
-void color_sensor_1()
+void color_sensor_1(){}
 
 void lane_decider(int blue_reading, int red_reading) {
   if (red_reading >  5 && blue_reading > 355 && blue_reading < 395) {

@@ -27,14 +27,22 @@ void setup() {
 
   delay(100);
 
+<<<<<<< Updated upstream
   ensureWiFi();
   ensureWebSocket();
+=======
+  // ensureWiFi();
+  // ensureWebSocket();
+
+
+>>>>>>> Stashed changes
 }
 
 void loop() {
-  ensureWiFi();
-  ensureWebSocket();
+  // ensureWiFi();
+  // ensureWebSocket();
 
+<<<<<<< Updated upstream
   // ========================== WE ARE BOT 1
 
 
@@ -68,4 +76,53 @@ void loop() {
   handleWebSocketMessages();
   runStateMachine();
 
+=======
+  // handleWebSocketMessages();
+  // runStateMachine(); 
+  //ir led test
+  // if (read_sensor() < 800){
+  //   bot_forward(255);
+
+  // }
+  // else {
+  //   bot_stop();
+  // }
+
+  //color_sensing();
+
+  // // put your main code here, to run repeatedly:
+  // bot_forward(200);
+  // delay(2000);
+  // bot_stop();
+  // delay(2000);
+  // bot_backwards(200);
+  // delay(2000);
+  // bot_stop();
+  // delay(2000);
+  // bot_clockwise();
+  // delay(2000);
+  // bot_stop();
+  // delay(2000);
+  // bot_counterclockwise();
+  // delay(2000);
+  // bot_stop();
+  // delay(2000);
+  // bot_turnRight(10);
+  // delay(2000);
+  // bot_stop();
+  // delay(2000);
+  // bot_turnLeft(10);
+  // delay(2000);
+  // bot_stop();
+
+  // ensureWiFi();
+  // ensureWebSocket();
+
+  // handleWebSocketMessages();
+  // handleButton();
+
+  // delay(2);
+
+  check_wall();
+>>>>>>> Stashed changes
 }
