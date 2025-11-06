@@ -28,9 +28,12 @@ void setup() {
   delay(100);
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   ensureWiFi();
   ensureWebSocket();
 =======
+=======
+>>>>>>> Stashed changes
   // ensureWiFi();
   // ensureWebSocket();
 
@@ -41,6 +44,7 @@ void setup() {
 void loop() {
   // ensureWiFi();
   // ensureWebSocket();
+<<<<<<< Updated upstream
 
 <<<<<<< Updated upstream
   // ========================== WE ARE BOT 1
@@ -76,7 +80,6 @@ void loop() {
   handleWebSocketMessages();
   runStateMachine();
 
-=======
   // handleWebSocketMessages();
   // runStateMachine(); 
   //ir led test
@@ -124,5 +127,4 @@ void loop() {
   // delay(2);
 
   check_wall();
->>>>>>> Stashed changes
 }
