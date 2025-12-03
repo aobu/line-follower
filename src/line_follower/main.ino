@@ -1,10 +1,14 @@
 void setup() {
   Serial.begin(9600);
-  setState(STOP);
+  //setState(STOP);
+
+  // Arduino LED
+  pinMode(LED_BUILTIN, OUTPUT);
 
   //IR LED Setup
-  pinMode(ledPin, OUTPUT);
-  analogWrite(ledPin, 255);   // 0-255 (128 ≈ 50%)
+  // pinMode(ledPin, OUTPUT);
+  // analogWrite(ledPin, 255);   // 0-255 (128 ≈ 50%)
+  // base = ambientlight_store();
 
   //Motor Setup
   pinMode(motor1_in1, OUTPUT);
@@ -18,62 +22,27 @@ void setup() {
   digitalWrite(motor2_en34_pin, HIGH); // turns on enable for motor 2
 
   // Color Sensor Setup
-  pinMode(red, OUTPUT);
-  pinMode(blue, OUTPUT);
+  pinMode(red1, OUTPUT);
+  pinMode(red2, OUTPUT);
+  pinMode(blue1, OUTPUT);
+  pinMode(blue2, OUTPUT);
 
   //Websocket Setup
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  pinMode(LED_PIN, OUTPUT);
+  // pinMode(BUTTON_PIN, INPUT_PULLUP);
+  // pinMode(LED_PIN, OUTPUT);
 
-  delay(100);
+  // delay(100);
 
-  ensureWiFi();
-  ensureWebSocket();
-
-
+  // ensureWiFi();
+  // ensureWebSocket();
 }
 
 void loop() {
-  ensureWiFi();
-  ensureWebSocket();
-
-  handleWebSocketMessages();
-  runStateMachine(); 
-  //ir led test
-  if (read_sensor() < 800){
-    bot_forward(255);
-
-  }
-  else {
-    bot_stop();
-  }
-
-  color_sensing();
-
-  // // put your main code here, to run repeatedly:
-  // bot_forward(200);
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_backwards(200);
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_clockwise();
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_counterclockwise();
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_turnRight(10);
-  // delay(2000);
-  // bot_stop();
-  // delay(2000);
-  // bot_turnLeft(10);
-  // delay(2000);
-  // bot_stop();
+  delay(1000);
+  color_calibration();
+  follow_lane(1);
+  // ensureWiFi();
+  // ensureWebSocket();
 
   // ensureWiFi();
   // ensureWebSocket();
@@ -81,5 +50,4 @@ void loop() {
   // handleWebSocketMessages();
   // handleButton();
 
-  // delay(2);
 }

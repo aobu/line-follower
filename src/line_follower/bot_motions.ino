@@ -56,7 +56,7 @@ void bot_turnRight() {
   analogWrite(motor1_in2, 0);
   // Motor 2
   analogWrite(motor2_in1, 0);
-  analogWrite(motor2_in2, 127);
+  analogWrite(motor2_in2, 20);
 }
 
 void bot_turnLeft() {
@@ -65,4 +65,23 @@ void bot_turnLeft() {
   // Motor 2
   analogWrite(motor2_in1, 0);
   analogWrite(motor2_in2, 255);
+}
+
+
+void bot_lane_right() {
+  bot_turnRight();
+  delay(100);
+  bot_forward(255);
+  delay(200);
+  bot_stop();
+  delay(1000);
+}
+
+void bot_lane_left() {
+  bot_turnLeft();
+  delay(200);
+  bot_forward(255);
+  delay(200);
+  bot_stop();
+  delay(1000);
 }
