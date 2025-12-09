@@ -20,6 +20,10 @@ int black_calibration_r2;
 int black_calibration_b2;
 int yellow_calibration_r2;
 int yellow_calibration_b2;
+int baseline_calibration_r1;
+int baseline_calibration_r2;
+int baseline_calibration_b1;
+int baseline_calibration_b2;
 
 void follow_lane(int desired_lane) {
   int baseline1 = 0;
@@ -196,6 +200,15 @@ int lane_decider2(int blue_reading, int red_reading) {
 }
 
 void color_calibration() {
+  digitalWrite(blue1, LOW);
+  digitalWrite(blue2, LOW);
+  digitalWrite(red1, LOW);
+  digitalWrite(red2, LOW);
+  baseline_calibration_r1 = analogRead(pr1);
+  baseline_calibration_b1 = analogRead(pr1);
+  baseline_calibration_r2 = analogRead(pr2);
+  baseline_calibration_b2 = analogRead(pr2);
+
   calibrate_red();
   
   digitalWrite(LED_BUILTIN, HIGH);
@@ -276,7 +289,9 @@ void calibrate_red() {
   digitalWrite(red2, HIGH);
   delay(10);
   red_calibration_r1 = analogRead(pr1);
+  red_calibration_r1 = red_calibration_r1 - baseline_calibration_r1;
   red_calibration_r2 = analogRead(pr2);
+  red_calibration_r2 = red_calibration_r2 - baseline_calibration_r2;
 
   digitalWrite(blue1, HIGH);
   digitalWrite(blue2, HIGH);
@@ -284,7 +299,9 @@ void calibrate_red() {
   digitalWrite(red2, LOW);
   delay(10);
   red_calibration_b1 = analogRead(pr1);
+  red_calibration_b1 = red_calibration_b1 - baseline_calibration_b1;
   red_calibration_b2 = analogRead(pr2);
+  red_calibration_b2 = red_calibration_b2 - baseline_calibration_b2;
 }
 
 void calibrate_yellow() {
@@ -300,7 +317,9 @@ void calibrate_yellow() {
   digitalWrite(red2, HIGH);
   delay(10);
   yellow_calibration_r1 = analogRead(pr1);
+  yellow_calibration_r1 = yellow_calibration_r1 - baseline_calibration_r1;
   yellow_calibration_r2 = analogRead(pr2);
+  yellow_calibration_r2 = yellow_calibration_r2 - baseline_calibration_r2;
 
   digitalWrite(blue1, HIGH);
   digitalWrite(blue2, HIGH);
@@ -308,7 +327,9 @@ void calibrate_yellow() {
   digitalWrite(red2, LOW);
   delay(10);
   yellow_calibration_b1 = analogRead(pr1);
+  yellow_calibration_b1 = yellow_calibration_b1 - baseline_calibration_b1;
   yellow_calibration_b2 = analogRead(pr2);
+  yellow_calibration_b2 = yellow_calibration_b2 - baseline_calibration_b2;
 }
 
 void calibrate_blue() {
@@ -324,7 +345,9 @@ void calibrate_blue() {
   digitalWrite(red2, HIGH);
   delay(10);
   blue_calibration_r1 = analogRead(pr1);
+  blue_calibration_r1 = blue_calibration_r1 - baseline_calibration_r1;
   blue_calibration_r2 = analogRead(pr2);
+  blue_calibration_r2 = blue_calibration_r2 - baseline_calibration_r2;
 
   digitalWrite(blue1, HIGH);
   digitalWrite(blue2, HIGH);
@@ -332,7 +355,9 @@ void calibrate_blue() {
   digitalWrite(red2, LOW);
   delay(10);
   blue_calibration_b1 = analogRead(pr1);
+  blue_calibration_b1 = blue_calibration_b1 - baseline_calibration_b1;
   blue_calibration_b2 = analogRead(pr2);
+  blue_calibration_b2 = blue_calibration_b2 - baseline_calibration_b2;
 }
 
 void calibrate_black() {
@@ -348,7 +373,9 @@ void calibrate_black() {
   digitalWrite(red2, HIGH);
   delay(10);
   black_calibration_r1 = analogRead(pr1);
+  black_calibration_r1 = black_calibration_r1 - baseline_calibration_r1;
   black_calibration_r2 = analogRead(pr2);
+  black_calibration_r2 = black_calibration_r2 - baseline_calibration_r2;
 
   digitalWrite(blue1, HIGH);
   digitalWrite(blue2, HIGH);
@@ -356,5 +383,7 @@ void calibrate_black() {
   digitalWrite(red2, LOW);
   delay(10);
   black_calibration_b1 = analogRead(pr1);
+  black_calibration_b1 = black_calibration_b1 - baseline_calibration_b1;
   black_calibration_b2 = analogRead(pr2);
+  black_calibration_b2 = black_calibration_b2 - baseline_calibration_b2;
 }

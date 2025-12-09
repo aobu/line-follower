@@ -3,7 +3,9 @@
 // void run_solo() {
 //   while (machine_state == 0) { // State 0 = collision avoidance
 //     bot_forward(255);
-//     // if collision detection code
+//     if (check_wall(base)) {
+//       state++;
+//     }
 //   }
 
 //   while (machine_state == 1) { // State 1 = reverse until on red lane
