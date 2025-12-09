@@ -40,7 +40,7 @@ void setup() {
 void loop() {
   delay(1000);
   color_calibration();
-  follow_lane(1);
+  //follow_lane(1);
   // ensureWiFi();
   // ensureWebSocket();
 

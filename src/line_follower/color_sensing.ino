@@ -144,16 +144,17 @@ void color_sensor(int lane_number1, int lane_number2, int desired_lane) {
   Serial.println(lane_number2);
   Serial.print("desired lane: ");
   Serial.println(desired_lane);
-  if(lane_number1 == 0 and lane_number2 == 0) {
+  if(lane_number1 == 0 &&
+   lane_number2 == 0) {
     bot_stop();
     return;
   }
 
-  if (lane_number1 == desired_lane and lane_number1 == lane_number2) {
+  if (lane_number1 == desired_lane && lane_number1 == lane_number2) {
     bot_forward(255);
-  } else if (lane_number1 == desired_lane and lane_number2 != desired_lane) {
+  } else if (lane_number1 == desired_lane && lane_number2 != desired_lane) {
     bot_turnLeft();
-  } else if (lane_number2 == desired_lane and lane_number1 != desired_lane) {
+  } else if (lane_number2 == desired_lane && lane_number1 != desired_lane) {
     bot_turnRight();
   }
 }
@@ -178,16 +179,16 @@ int lane_decider1(int blue_reading, int red_reading) {
 
 int lane_decider2(int blue_reading, int red_reading) {
   if (red_reading <= (red_calibration_r2 + 10) && red_reading >= (red_calibration_r2 - 10) && blue_reading >= (red_calibration_b2 - 10) && blue_reading <= (red_calibration_b2 + 10)) {
-    Serial.println("Sensor 1 On Red Lane");
+    Serial.println("Sensor 2 On Red Lane");
     return 1;
   } else if (red_reading <= (yellow_calibration_r2 + 10) && red_reading >= (yellow_calibration_r2 - 10) && blue_reading >= (yellow_calibration_b2 - 10) && blue_reading <= (yellow_calibration_b2 + 10)) {
-    Serial.println("Sensor 1 On Yellow Lane");
+    Serial.println("Sensor 2 On Yellow Lane");
     return 2;
   } else if (red_reading >= (blue_calibration_r2 - 10) && red_reading <= (blue_calibration_r2 + 10) && blue_reading <= (blue_calibration_b2 + 10) && blue_reading >= (blue_calibration_b2 - 10)) {
-    Serial.println("Sensor 1 On Blue Lane");
+    Serial.println("Sensor 2 On Blue Lane");
     return 3;
   } else if (red_reading >= (black_calibration_r2 - 10) && red_reading <= (black_calibration_r2 + 10) && blue_reading <= (black_calibration_b2 + 10) && blue_reading >= (black_calibration_b2 - 10)) {
-    Serial.println("Sensor 1 On Black");
+    Serial.println("Sensor 2 On Black");
     return 4;
   } else {
     return 0;
@@ -216,6 +217,45 @@ void color_calibration() {
   digitalWrite(red1, LOW);
   digitalWrite(red2, LOW);
   delay(5000);
+  Serial.print("Red Color Calibration Value: \n");
+  Serial.print("  Red LED 1: ");
+  Serial.println(red_calibration_r1);
+  Serial.print("  Red LED 2: ");
+  Serial.println(red_calibration_r2);
+  Serial.print("  Blue LED 1: ");
+  Serial.println(red_calibration_b1);
+  Serial.print("  Blue LED 2: ");
+  Serial.println(red_calibration_b2);
+
+  Serial.print("Blue Color Calibration Value: \n");
+  Serial.print("  Red LED 1: ");
+  Serial.println(blue_calibration_r1);
+  Serial.print("  Red LED 2: ");
+  Serial.println(blue_calibration_r2);
+  Serial.print("  Blue LED 1: ");
+  Serial.println(blue_calibration_b1);
+  Serial.print("  Blue LED 2: ");
+  Serial.println(blue_calibration_b2);
+
+  Serial.print("Yellow Color Calibration Value: \n");
+  Serial.print("  Red LED 1: ");
+  Serial.println(yellow_calibration_r1);
+  Serial.print("  Red LED 2: ");
+  Serial.println(yellow_calibration_r2);
+  Serial.print("  Blue LED 1: ");
+  Serial.println(yellow_calibration_b1);
+  Serial.print("  Blue LED 2: ");
+  Serial.println(yellow_calibration_b2);
+
+  Serial.print("Black Color Calibration Value: \n");
+  Serial.print("  Red LED 1: ");
+  Serial.println(black_calibration_r1);
+  Serial.print("  Red LED 2: ");
+  Serial.println(black_calibration_r2);
+  Serial.print("  Blue LED 1: ");
+  Serial.println(black_calibration_b1);
+  Serial.print("  Blue LED 2: ");
+  Serial.println(black_calibration_b2);
 }
 
 void calibrate_red() {
