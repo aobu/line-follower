@@ -197,26 +197,8 @@ int lane_decider2(int blue_reading, int red_reading) {
 
 void color_calibration() {
   calibrate_red();
+  
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(4000);
-  calibrate_yellow();
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(4000);
-  calibrate_blue();
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(4000);
-  calibrate_black();
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(5000);
   Serial.print("Red Color Calibration Value: \n");
   Serial.print("  Red LED 1: ");
   Serial.println(red_calibration_r1);
@@ -227,15 +209,10 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(red_calibration_b2);
 
-  Serial.print("Blue Color Calibration Value: \n");
-  Serial.print("  Red LED 1: ");
-  Serial.println(blue_calibration_r1);
-  Serial.print("  Red LED 2: ");
-  Serial.println(blue_calibration_r2);
-  Serial.print("  Blue LED 1: ");
-  Serial.println(blue_calibration_b1);
-  Serial.print("  Blue LED 2: ");
-  Serial.println(blue_calibration_b2);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(4000);
+  calibrate_yellow();
 
   Serial.print("Yellow Color Calibration Value: \n");
   Serial.print("  Red LED 1: ");
@@ -247,6 +224,28 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(yellow_calibration_b2);
 
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(4000);
+  calibrate_blue();
+
+  Serial.print("Blue Color Calibration Value: \n");
+  Serial.print("  Red LED 1: ");
+  Serial.println(blue_calibration_r1);
+  Serial.print("  Red LED 2: ");
+  Serial.println(blue_calibration_r2);
+  Serial.print("  Blue LED 1: ");
+  Serial.println(blue_calibration_b1);
+  Serial.print("  Blue LED 2: ");
+  Serial.println(blue_calibration_b2);
+
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(4000);
+  calibrate_black();
+
   Serial.print("Black Color Calibration Value: \n");
   Serial.print("  Red LED 1: ");
   Serial.println(black_calibration_r1);
@@ -256,6 +255,12 @@ void color_calibration() {
   Serial.println(black_calibration_b1);
   Serial.print("  Blue LED 2: ");
   Serial.println(black_calibration_b2);
+
+  digitalWrite(blue1, LOW);
+  digitalWrite(blue2, LOW);
+  digitalWrite(red1, LOW);
+  digitalWrite(red2, LOW);
+  delay(5000);
 }
 
 void calibrate_red() {
