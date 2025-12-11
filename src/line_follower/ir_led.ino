@@ -1,42 +1,43 @@
-// const int ledPin = 3;      // IR LED anode (through resistor)
-// const int sensorPin = A0;  // Phototransistor collector
-// int base = 0;
+const int ledPin = 3;      // IR LED anode (through resistor)
+const int sensorPin = A0;  // Phototransistor collector
+int base = 0;
 
-// int read_sensor() {
-//   // Read sensor voltage (0–1023 corresponds to 0–5 V)
-//   int sensorValue = analogRead(sensorPin);
-//   //Serial.println(sensorValue);
-//   return sensorValue;
-//   // Print result
+int read_sensor() {
+  // Read sensor voltage (0–1023 corresponds to 0–5 V)
+  int sensorValue = analogRead(sensorPin);
+  //Serial.println(sensorValue);
+  return sensorValue;
+  // Print result
 
-// }
+}
 
-// bool check_wall(int ambient) {
+bool check_wall(int ambient) {
 
-//   //int values[15];
-//   int avg=0;
-//   for (int i = 0; i < 15; i++) {
-//     avg += analogRead(sensorPin);
-//   }
-//   avg = avg/15;
+  //int values[15];
+  int avg=0;
+  for (int i = 0; i < 15; i++) {
+    avg += analogRead(sensorPin);
+  }
+  avg = avg/15;
 
 
-//   int adj_avg = avg-ambient;
-//   Serial.println(String(adj_avg)+ ", " + String(ambient));
+  int adj_avg = avg-ambient;
+  Serial.println(String(adj_avg)+ ", " + String(ambient));
 
-//   if (adj_avg > 100) {
-//     //bot_forward(200);
-//     return false;
-//   }
-//   else {
-//     bot_stop();
-//     return true;
-//   }
-// }
+  if (adj_avg > -10) {
+    //bot_forward(200);
+    return false;
+  }
+  else {
+    bot_stop();
+    //delay(1000);
+    return true;
+  }
+}
 
-// int ambientlight_store() {
-//   analogWrite(ledPin, 0);  // 0-255 (128 ≈ 50%)
-//   int ambientSensorValue = analogRead(sensorPin);
-//   analogWrite(ledPin, 255);
-//   return ambientSensorValue;
-// }
+int ambientlight_store() {
+  analogWrite(ledPin, 0);  // 0-255 (128 ≈ 50%)
+  int ambientSensorValue = analogRead(sensorPin);
+  analogWrite(ledPin, 255);
+  return ambientSensorValue;
+}

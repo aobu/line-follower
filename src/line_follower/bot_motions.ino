@@ -52,19 +52,19 @@ void bot_counterclockwise() {
 }
 
 void bot_turnRight() {  
-  analogWrite(motor1_in1, 255);
+  analogWrite(motor1_in1, 75);
   analogWrite(motor1_in2, 0);
   // Motor 2
   analogWrite(motor2_in1, 0);
-  analogWrite(motor2_in2, 20);
+  analogWrite(motor2_in2, 30);
 }
 
 void bot_turnLeft() {
-  analogWrite(motor1_in1, 127);
+  analogWrite(motor1_in1, 30);
   analogWrite(motor1_in2, 0);
   // Motor 2
   analogWrite(motor2_in1, 0);
-  analogWrite(motor2_in2, 255);
+  analogWrite(motor2_in2, 75);
 }
 
 
@@ -84,4 +84,10 @@ void bot_lane_left() {
   delay(200);
   bot_stop();
   delay(1000);
+}
+
+void bot_clockwise_90() {
+  bot_clockwise();
+  delay(700);
+  bot_stop();
 }

@@ -133,14 +133,14 @@ void color_sensor(int lane_number1, int lane_number2, int desired_lane) {
   Serial.println(lane_number2);
   Serial.print("desired lane: ");
   Serial.println(desired_lane);
-  if(lane_number1 == 0 &&
-   lane_number2 == 0) {
+  if((lane_number1 == 0 &&
+   lane_number2 == 0) || (lane_number1 == 4 && lane_number2 == 4)) {
     bot_stop();
     return;
   }
 
   if (lane_number1 == desired_lane && lane_number1 == lane_number2) {
-    bot_forward(255);
+    bot_forward(50);
   } else if (lane_number1 == desired_lane && lane_number2 != desired_lane) {
     bot_turnLeft();
   } else if (lane_number2 == desired_lane && lane_number1 != desired_lane) {
@@ -247,6 +247,25 @@ void color_calibration() {
 
   turnoffLEDs();
   delay(5000);
+  red_calibration_r1 = red_calibration_r1 - 25;
+  red_calibration_r2 = red_calibration_r2 - 25;
+  red_calibration_b1 = red_calibration_b1 - 25;
+  red_calibration_b2 = red_calibration_b2 - 25;
+
+  yellow_calibration_r1 = yellow_calibration_r1 - 30;
+  yellow_calibration_r2 = yellow_calibration_r2 - 30;
+  yellow_calibration_b1 = yellow_calibration_b1 - 30;
+  yellow_calibration_b2 = yellow_calibration_b2 - 30;
+
+  blue_calibration_r1 = blue_calibration_r1 - 20;
+  blue_calibration_r2 = blue_calibration_r2 - 20;
+  blue_calibration_b1 = blue_calibration_b1 - 20;
+  blue_calibration_b2 = blue_calibration_b2 - 20;
+
+  black_calibration_r1 = black_calibration_r1 - 20;
+  black_calibration_r2 = black_calibration_r2 - 20;
+  black_calibration_b1 = black_calibration_b1 - 20;
+  black_calibration_b2 = black_calibration_b2 - 20;
 }
 
 void calibrate_red() {
