@@ -1,5 +1,5 @@
-int red1 = 11;
-int blue1 = 2;
+int red1 = 2;
+int blue1 = 11;
 int red2 = 12;
 int blue2 = 13;
 int pr1 = A4;
@@ -38,37 +38,25 @@ void follow_lane(int desired_lane) {
   int red_reading2 = 0;
   
   // Baseline calibration
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
+  turnoffLEDs();
   baseline1 = analogRead(pr1);
   baseline2 = analogRead(pr2);
   delay(10);
 
   // Read Red
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, HIGH);
-  digitalWrite(red2, HIGH);
+  turnonRed();
   delay(10);
   red_reading1 = analogRead(pr1);
   red_reading2 = analogRead(pr2);
 
   // Read Blue 
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  digitalWrite(blue1, HIGH);
-  digitalWrite(blue2, HIGH);
+  turnonBlue();
   delay(10);
   
   blue_reading1 = analogRead(pr1);
   blue_reading2 = analogRead(pr2);
 
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
+  turnoffLEDs();
 
   // Only print reading 1
   blue_1 = blue_reading1 - baseline1;
@@ -77,6 +65,15 @@ void follow_lane(int desired_lane) {
   red_2 = red_reading2 - baseline2;
   int lane_number1 = lane_decider1(blue_1, red_1);
   int lane_number2 = lane_decider2(blue_2, red_2);
+
+  Serial.print("Red1: ");
+  Serial.println(red_1);
+  Serial.print("Blue1: ");
+  Serial.println(blue_1);
+  Serial.print("Red2: ");
+  Serial.println(red_2);
+  Serial.print("Blue2: ");
+  Serial.println(blue_2);
 
   color_sensor(lane_number1, lane_number2, desired_lane);
 }
@@ -94,37 +91,25 @@ bool color_sense(int desired_lane) {
   int red_reading2 = 0;
   
   // Baseline calibration
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
+  turnoffLEDs();
   baseline1 = analogRead(pr1);
   baseline2 = analogRead(pr2);
   delay(10);
 
   // Read Red
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, HIGH);
-  digitalWrite(red2, HIGH);
+  turnonRed();
   delay(10);
   red_reading1 = analogRead(pr1);
   red_reading2 = analogRead(pr2);
 
   // Read Blue 
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  digitalWrite(blue1, HIGH);
-  digitalWrite(blue2, HIGH);
+  turnonBlue();
   delay(10);
   
   blue_reading1 = analogRead(pr1);
   blue_reading2 = analogRead(pr2);
 
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
+  turnoffLEDs();
 
   // Only print reading 1
   blue_1 = blue_reading1 - baseline1;
@@ -200,10 +185,7 @@ int lane_decider2(int blue_reading, int red_reading) {
 }
 
 void color_calibration() {
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
+  turnoffLEDs();
   baseline_calibration_r1 = analogRead(pr1);
   baseline_calibration_b1 = analogRead(pr1);
   baseline_calibration_r2 = analogRead(pr2);
@@ -211,7 +193,6 @@ void color_calibration() {
 
   calibrate_red();
   
-  digitalWrite(LED_BUILTIN, HIGH);
   Serial.print("Red Color Calibration Value: \n");
   Serial.print("  Red LED 1: ");
   Serial.println(red_calibration_r1);
@@ -222,9 +203,8 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(red_calibration_b2);
 
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(4000);
+  delay(5000);
+  turnoffLEDs();
   calibrate_yellow();
 
   Serial.print("Yellow Color Calibration Value: \n");
@@ -237,10 +217,8 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(yellow_calibration_b2);
 
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(4000);
+  delay(5000);
+  turnoffLEDs();
   calibrate_blue();
 
   Serial.print("Blue Color Calibration Value: \n");
@@ -253,10 +231,8 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(blue_calibration_b2);
 
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(4000);
+  delay(5000);
+  turnoffLEDs();
   calibrate_black();
 
   Serial.print("Black Color Calibration Value: \n");
@@ -269,35 +245,20 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(black_calibration_b2);
 
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
+  turnoffLEDs();
   delay(5000);
 }
 
 void calibrate_red() {
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(100);
+  turnoffLEDs();
 
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, HIGH);
-  digitalWrite(red2, HIGH);
-  delay(10);
+  turnonRed();
   red_calibration_r1 = analogRead(pr1);
   red_calibration_r1 = red_calibration_r1 - baseline_calibration_r1;
   red_calibration_r2 = analogRead(pr2);
   red_calibration_r2 = red_calibration_r2 - baseline_calibration_r2;
 
-  digitalWrite(blue1, HIGH);
-  digitalWrite(blue2, HIGH);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(10);
+  turnonBlue();
   red_calibration_b1 = analogRead(pr1);
   red_calibration_b1 = red_calibration_b1 - baseline_calibration_b1;
   red_calibration_b2 = analogRead(pr2);
@@ -305,27 +266,15 @@ void calibrate_red() {
 }
 
 void calibrate_yellow() {
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(100);
+  turnoffLEDs();
 
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, HIGH);
-  digitalWrite(red2, HIGH);
-  delay(10);
+  turnonRed();
   yellow_calibration_r1 = analogRead(pr1);
   yellow_calibration_r1 = yellow_calibration_r1 - baseline_calibration_r1;
   yellow_calibration_r2 = analogRead(pr2);
   yellow_calibration_r2 = yellow_calibration_r2 - baseline_calibration_r2;
 
-  digitalWrite(blue1, HIGH);
-  digitalWrite(blue2, HIGH);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(10);
+  turnonBlue();
   yellow_calibration_b1 = analogRead(pr1);
   yellow_calibration_b1 = yellow_calibration_b1 - baseline_calibration_b1;
   yellow_calibration_b2 = analogRead(pr2);
@@ -333,27 +282,15 @@ void calibrate_yellow() {
 }
 
 void calibrate_blue() {
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(100);
+  turnoffLEDs();
 
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, HIGH);
-  digitalWrite(red2, HIGH);
-  delay(10);
+  turnonRed();
   blue_calibration_r1 = analogRead(pr1);
   blue_calibration_r1 = blue_calibration_r1 - baseline_calibration_r1;
   blue_calibration_r2 = analogRead(pr2);
   blue_calibration_r2 = blue_calibration_r2 - baseline_calibration_r2;
 
-  digitalWrite(blue1, HIGH);
-  digitalWrite(blue2, HIGH);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(10);
+  turnonBlue();
   blue_calibration_b1 = analogRead(pr1);
   blue_calibration_b1 = blue_calibration_b1 - baseline_calibration_b1;
   blue_calibration_b2 = analogRead(pr2);
@@ -361,29 +298,41 @@ void calibrate_blue() {
 }
 
 void calibrate_black() {
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(100);
+  turnoffLEDs();
 
-  digitalWrite(blue1, LOW);
-  digitalWrite(blue2, LOW);
-  digitalWrite(red1, HIGH);
-  digitalWrite(red2, HIGH);
-  delay(10);
+  turnonRed();
   black_calibration_r1 = analogRead(pr1);
   black_calibration_r1 = black_calibration_r1 - baseline_calibration_r1;
   black_calibration_r2 = analogRead(pr2);
   black_calibration_r2 = black_calibration_r2 - baseline_calibration_r2;
 
-  digitalWrite(blue1, HIGH);
-  digitalWrite(blue2, HIGH);
-  digitalWrite(red1, LOW);
-  digitalWrite(red2, LOW);
-  delay(10);
+  turnonBlue();
   black_calibration_b1 = analogRead(pr1);
   black_calibration_b1 = black_calibration_b1 - baseline_calibration_b1;
   black_calibration_b2 = analogRead(pr2);
   black_calibration_b2 = black_calibration_b2 - baseline_calibration_b2;
+}
+
+void turnoffLEDs() {
+  digitalWrite(blue1, LOW);
+  digitalWrite(blue2, LOW);
+  digitalWrite(red1, LOW);
+  digitalWrite(red2, LOW);
+  delay(100);
+}
+
+void turnonRed() {
+  digitalWrite(blue1, LOW);
+  digitalWrite(blue2, LOW);
+  digitalWrite(red1, HIGH);
+  digitalWrite(red2, HIGH);
+  delay(100);
+}
+
+void turnonBlue() {
+  digitalWrite(blue1, HIGH);
+  digitalWrite(blue2, HIGH);
+  digitalWrite(red1, LOW);
+  digitalWrite(red2, LOW);
+  delay(100);
 }

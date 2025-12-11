@@ -35,11 +35,13 @@ void setup() {
 
   // ensureWiFi();
   // ensureWebSocket();
+  delay(1000);
+  color_calibration();
 }
 
 void loop() {
+  follow_lane(1);
   delay(1000);
-  color_calibration();
   //follow_lane(1);
   // ensureWiFi();
   // ensureWebSocket();
