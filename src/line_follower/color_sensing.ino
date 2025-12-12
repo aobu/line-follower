@@ -66,14 +66,23 @@ void follow_lane(int desired_lane) {
   int lane_number1 = lane_decider1(blue_1, red_1);
   int lane_number2 = lane_decider2(blue_2, red_2);
 
-  Serial.print("Red1: ");
-  Serial.println(red_1);
-  Serial.print("Blue1: ");
-  Serial.println(blue_1);
-  Serial.print("Red2: ");
-  Serial.println(red_2);
-  Serial.print("Blue2: ");
-  Serial.println(blue_2);
+  // Secrial.print("Red1: ");
+  // Serial.println(red_1);
+  // Serial.print("Blue1: ");
+  // Serial.println(blue_1);
+  // Serial.print("Red2: ");
+  // Serial.println(red_2);
+  // Serial.print("Blue2: ");
+  // Serial.println(blue_2);
+
+  client.print("Red1: ");
+  client.println(red_1);
+  client.print("Blue1: ");
+  client.println(blue_1);
+  client.print("Red2: ");
+  client.println(red_2);
+  client.print("Blue2: ");
+  client.println(blue_2);
 
   color_sensor(lane_number1, lane_number2, desired_lane);
 }
@@ -247,24 +256,32 @@ void color_calibration() {
 
   turnoffLEDs();
   delay(5000);
-  red_calibration_r1 = red_calibration_r1 - 25;
-  red_calibration_r2 = red_calibration_r2 - 25;
-  red_calibration_b1 = red_calibration_b1 - 25;
-  red_calibration_b2 = red_calibration_b2 - 25;
+  red_calibration_r1 = red_calibration_r1 + 180;
+  red_calibration_r2 = red_calibration_r2 - 22;
+  red_calibration_b1 = red_calibration_b1 + 250;
+  red_calibration_b2 = red_calibration_b2 - 22;
+  client.print("Red1: ");
+  client.println(red_calibration_r1);
+  client.print("Blue1: ");
+  client.println(red_calibration_b1);
+  client.print("Red2: ");
+  client.println(red_calibration_r2);
+  client.print("Blue2: ");
+  client.println(red_calibration_b2);
 
-  yellow_calibration_r1 = yellow_calibration_r1 - 30;
+  yellow_calibration_r1 = yellow_calibration_r1 + 168;
   yellow_calibration_r2 = yellow_calibration_r2 - 30;
-  yellow_calibration_b1 = yellow_calibration_b1 - 30;
+  yellow_calibration_b1 = yellow_calibration_b1 + 230;
   yellow_calibration_b2 = yellow_calibration_b2 - 30;
 
-  blue_calibration_r1 = blue_calibration_r1 - 20;
+  blue_calibration_r1 = blue_calibration_r1 + 185;
   blue_calibration_r2 = blue_calibration_r2 - 20;
-  blue_calibration_b1 = blue_calibration_b1 - 20;
+  blue_calibration_b1 = blue_calibration_b1 + 220;
   blue_calibration_b2 = blue_calibration_b2 - 20;
 
-  black_calibration_r1 = black_calibration_r1 - 20;
+  black_calibration_r1 = black_calibration_r1 + 185;
   black_calibration_r2 = black_calibration_r2 - 20;
-  black_calibration_b1 = black_calibration_b1 - 20;
+  black_calibration_b1 = black_calibration_b1 + 220;
   black_calibration_b2 = black_calibration_b2 - 20;
 }
 

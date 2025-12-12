@@ -28,15 +28,15 @@ void setup() {
   pinMode(blue2, OUTPUT);
 
   //Websocket Setup
-  // pinMode(BUTTON_PIN, INPUT_PULLUP);
-  // pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(LED_PIN, OUTPUT);
 
-  // delay(100);
+  delay(100);
 
-  // ensureWiFi();
-  // ensureWebSocket();
-  // delay(1000);
-  color_calibration();
+  ensureWiFi();
+  ensureWebSocket();
+  delay(10);
+  // color_calibration();
 
   // while 
   // bot_clockwise_90();
@@ -48,7 +48,8 @@ void setup() {
 }
 
 void loop() {
-  follow_lane(1);
+  readWebSocket();
+  //follow_lane(1);
   //bot_forward(255);
   //check_wall(base);
   //follow_lane(1);
