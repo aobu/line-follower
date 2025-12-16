@@ -30,6 +30,8 @@ int avg_r1;
 int avg_r2;
 int avg_b1;
 int avg_b2;
+int button = 1;
+int button_press = 0;
 
 void follow_lane(int desired_lane) {
   int baseline1 = 0;
@@ -72,14 +74,14 @@ void follow_lane(int desired_lane) {
   int lane_number1 = lane_decider1(blue_1, red_1);
   int lane_number2 = lane_decider2(blue_2, red_2);
 
-  // Serial.print("Red1: ");
-  // Serial.println(red_1);
-  // Serial.print("Red2: ");
-  // Serial.println(red_2);
-  // Serial.print("Blue1: ");
-  // Serial.println(blue_1);
-  // Serial.print("Blue2: ");
-  // Serial.println(blue_2);
+  Serial.print("Red1: ");
+  Serial.println(red_1);
+  Serial.print("Red2: ");
+  Serial.println(red_2);
+  Serial.print("Blue1: ");
+  Serial.println(blue_1);
+  Serial.print("Blue2: ");
+  Serial.println(blue_2);
 
   String message = "Sensing Values";
   String message_1 = "Red1: " + String(red_1);
@@ -202,12 +204,14 @@ int lane_decider2(int blue_reading, int red_reading) {
 }
 
 void color_calibration() {
+  button_press = 0;
   turnoffLEDs();
   baseline_calibration_r1 = analogRead(pr1);
   baseline_calibration_b1 = analogRead(pr1);
   baseline_calibration_r2 = analogRead(pr2);
   baseline_calibration_b2 = analogRead(pr2);
 
+  button_check(1);
   calibrate_red();
   
   Serial.print("Red Color Calibration Value: \n");
@@ -220,8 +224,8 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(red_calibration_b2);
 
-  delay(5000);
   turnoffLEDs();
+  button_check(2);
   calibrate_yellow();
 
   Serial.print("Yellow Color Calibration Value: \n");
@@ -234,8 +238,8 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(yellow_calibration_b2);
 
-  delay(5000);
   turnoffLEDs();
+  button_check(3);
   calibrate_blue();
 
   Serial.print("Blue Color Calibration Value: \n");
@@ -248,8 +252,8 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(blue_calibration_b2);
 
-  delay(5000);
   turnoffLEDs();
+  button_check(4);
   calibrate_black();
 
   Serial.print("Black Color Calibration Value: \n");
@@ -262,7 +266,6 @@ void color_calibration() {
   Serial.print("  Blue LED 2: ");
   Serial.println(black_calibration_b2);
   turnoffLEDs();
-  delay(5000);
   red_calibration_r1 = red_calibration_r1 - 80;
   red_calibration_r2 = red_calibration_r2 - 60;
   red_calibration_b1 = red_calibration_b1 - 80;
@@ -457,7 +460,7 @@ void turnoffLEDs() {
   digitalWrite(blue2, LOW);
   digitalWrite(red1, LOW);
   digitalWrite(red2, LOW);
-  delay(50);
+  delay(25);
 }
 
 void turnonRed() {
@@ -474,4 +477,19 @@ void turnonBlue() {
   digitalWrite(red1, LOW);
   digitalWrite(red2, LOW);
   delay(50);
+}
+
+void button_check(int desired_value) {
+  Serial.print("Button press: ");
+  Serial.println(button_press);
+  while (button_press != desired_value) {
+    int reading = digitalRead(button);
+
+    if (prev_button_reading == HIGH && reading == LOW) {
+      button_press++;      
+      delay(10);       
+    }
+    prev_button_reading = reading;
+  }
+  
 }

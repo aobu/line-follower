@@ -11,7 +11,7 @@ int read_sensor() {
 
 }
 
-bool check_wall(int ambient) {
+void check_wall(int ambient) {
 
   //int values[15];
   int avg=0;
@@ -26,12 +26,11 @@ bool check_wall(int ambient) {
 
   if (adj_avg > -40) {
     //bot_forward(200);
-    return false;
   }
   else {
     bot_stop();
     //delay(1000);
-    return true;
+    //machine_state++;
   }
 }
 

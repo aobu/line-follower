@@ -28,7 +28,7 @@ void setup() {
   pinMode(blue2, OUTPUT);
 
   //Websocket Setup
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(button, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);
 
   delay(100);

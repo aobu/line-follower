@@ -216,7 +216,7 @@ void handleButton() {
 
   if (prev_button_reading == HIGH && reading == LOW) {
     bumpState();      
-    delay(150);       
+    delay(10);       
   }
   prev_button_reading = reading;
 }
