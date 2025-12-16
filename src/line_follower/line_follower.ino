@@ -3,7 +3,7 @@
 #include <string.h>
 
 // PINES/STATE ===========================================================
-const int BUTTON_PIN = 2;
+const int BUTTON_PIN = 0;
 const int LED_PIN = LED_BUILTIN;
 
 int prev_button_reading = HIGH;
@@ -14,8 +14,8 @@ char pass[] = "foundedin1883";
 
 // IMPORTANT: Replace this with your computer's local IP address (e.g., 192.168.1.15)
 // Do not use "localhost" here.
-char serverAddress[] = "35.239.140.61"; 
-int port = 8080; // Updated to match your Python server
+char serverAddress[] = "10.5.15.226"; 
+int port = 8765; // Updated to match your Python server
 
 WiFiClient wifi;
 WebSocketClient client = WebSocketClient(wifi, serverAddress, port);
@@ -226,8 +226,16 @@ void readWebSocket() {
   if (msgSize <= 0) return;
 
   String m = client.readString();
-  m.trim();
 
   Serial.print("WS message: ");
   Serial.println(m);
+}
+
+void sendMessage(String message) {
+  if (client.connected()) {
+    client.beginMessage(TYPE_TEXT); 
+    client.print(message);
+    client.endMessage(); 
+    Serial.println("Sent message to WebSocket server.");
+  }
 }

@@ -1,3 +1,5 @@
+#include <string.h>
+
 int red1 = 2;
 int blue1 = 11;
 int red2 = 12;
@@ -24,6 +26,10 @@ int baseline_calibration_r1;
 int baseline_calibration_r2;
 int baseline_calibration_b1;
 int baseline_calibration_b2;
+int avg_r1;
+int avg_r2;
+int avg_b1;
+int avg_b2;
 
 void follow_lane(int desired_lane) {
   int baseline1 = 0;
@@ -66,23 +72,25 @@ void follow_lane(int desired_lane) {
   int lane_number1 = lane_decider1(blue_1, red_1);
   int lane_number2 = lane_decider2(blue_2, red_2);
 
-  // Secrial.print("Red1: ");
+  // Serial.print("Red1: ");
   // Serial.println(red_1);
-  // Serial.print("Blue1: ");
-  // Serial.println(blue_1);
   // Serial.print("Red2: ");
   // Serial.println(red_2);
+  // Serial.print("Blue1: ");
+  // Serial.println(blue_1);
   // Serial.print("Blue2: ");
   // Serial.println(blue_2);
 
-  client.print("Red1: ");
-  client.println(red_1);
-  client.print("Blue1: ");
-  client.println(blue_1);
-  client.print("Red2: ");
-  client.println(red_2);
-  client.print("Blue2: ");
-  client.println(blue_2);
+  String message = "Sensing Values";
+  String message_1 = "Red1: " + String(red_1);
+  String message_2 = "Blue1: " + String(blue_1);
+  String message_3 = "Red2: " + String(red_2);
+  String message_4 = "Blue2: " + String(blue_2);
+  sendMessage(message);
+  sendMessage(message_1);
+  sendMessage(message_2);
+  sendMessage(message_3);
+  sendMessage(message_4);
 
   color_sensor(lane_number1, lane_number2, desired_lane);
 }
@@ -158,16 +166,16 @@ void color_sensor(int lane_number1, int lane_number2, int desired_lane) {
 }
 
 int lane_decider1(int blue_reading, int red_reading) {
-  if (red_reading <= (red_calibration_r1 + 10) && red_reading >= (red_calibration_r1 - 10) && blue_reading >= (red_calibration_b1 - 10) && blue_reading <= (red_calibration_b1 + 10)) {
+  if (red_reading <= (red_calibration_r1 + 20) && red_reading >= (red_calibration_r1 - 20) && blue_reading >= (red_calibration_b1 - 20) && blue_reading <= (red_calibration_b1 + 20)) {
     Serial.println("Sensor 1 On Red Lane");
     return 1;
-  } else if (red_reading <= (yellow_calibration_r1 + 10) && red_reading >= (yellow_calibration_r1 - 10) && blue_reading >= (yellow_calibration_b1 - 10) && blue_reading <= (yellow_calibration_b1 + 10)) {
+  } else if (red_reading <= (yellow_calibration_r1 + 20) && red_reading >= (yellow_calibration_r1 - 20) && blue_reading >= (yellow_calibration_b1 - 20) && blue_reading <= (yellow_calibration_b1 + 20)) {
     Serial.println("Sensor 1 On Yellow Lane");
     return 2;
-  } else if (red_reading >= (blue_calibration_r1 - 10) && red_reading <= (blue_calibration_r1 + 10) && blue_reading <= (blue_calibration_b1 + 10) && blue_reading >= (blue_calibration_b1 - 10)) {
+  } else if (red_reading >= (blue_calibration_r1 - 20) && red_reading <= (blue_calibration_r1 + 20) && blue_reading <= (blue_calibration_b1 + 20) && blue_reading >= (blue_calibration_b1 - 20)) {
     Serial.println("Sensor 1 On Blue Lane");
     return 3;
-  } else if (red_reading >= (black_calibration_r1 - 10) && red_reading <= (black_calibration_r1 + 10) && blue_reading <= (black_calibration_b1 + 10) && blue_reading >= (black_calibration_b1 - 10)) {
+  } else if (red_reading >= (black_calibration_r1 - 20) && red_reading <= (black_calibration_r1 + 20) && blue_reading <= (black_calibration_b1 + 20) && blue_reading >= (black_calibration_b1 - 20)) {
     Serial.println("Sensor 1 On Black");
     return 4;
   } else {
@@ -176,16 +184,16 @@ int lane_decider1(int blue_reading, int red_reading) {
 }
 
 int lane_decider2(int blue_reading, int red_reading) {
-  if (red_reading <= (red_calibration_r2 + 10) && red_reading >= (red_calibration_r2 - 10) && blue_reading >= (red_calibration_b2 - 10) && blue_reading <= (red_calibration_b2 + 10)) {
+  if (red_reading <= (red_calibration_r2 + 20) && red_reading >= (red_calibration_r2 - 20) && blue_reading >= (red_calibration_b2 - 20) && blue_reading <= (red_calibration_b2 + 20)) {
     Serial.println("Sensor 2 On Red Lane");
     return 1;
-  } else if (red_reading <= (yellow_calibration_r2 + 10) && red_reading >= (yellow_calibration_r2 - 10) && blue_reading >= (yellow_calibration_b2 - 10) && blue_reading <= (yellow_calibration_b2 + 10)) {
+  } else if (red_reading <= (yellow_calibration_r2 + 20) && red_reading >= (yellow_calibration_r2 - 20) && blue_reading >= (yellow_calibration_b2 - 20) && blue_reading <= (yellow_calibration_b2 + 20)) {
     Serial.println("Sensor 2 On Yellow Lane");
     return 2;
-  } else if (red_reading >= (blue_calibration_r2 - 10) && red_reading <= (blue_calibration_r2 + 10) && blue_reading <= (blue_calibration_b2 + 10) && blue_reading >= (blue_calibration_b2 - 10)) {
+  } else if (red_reading >= (blue_calibration_r2 - 20) && red_reading <= (blue_calibration_r2 + 20) && blue_reading <= (blue_calibration_b2 + 20) && blue_reading >= (blue_calibration_b2 - 20)) {
     Serial.println("Sensor 2 On Blue Lane");
     return 3;
-  } else if (red_reading >= (black_calibration_r2 - 10) && red_reading <= (black_calibration_r2 + 10) && blue_reading <= (black_calibration_b2 + 10) && blue_reading >= (black_calibration_b2 - 10)) {
+  } else if (red_reading >= (black_calibration_r2 - 20) && red_reading <= (black_calibration_r2 + 20) && blue_reading <= (black_calibration_b2 + 20) && blue_reading >= (black_calibration_b2 - 20)) {
     Serial.println("Sensor 2 On Black");
     return 4;
   } else {
@@ -253,100 +261,195 @@ void color_calibration() {
   Serial.println(black_calibration_b1);
   Serial.print("  Blue LED 2: ");
   Serial.println(black_calibration_b2);
-
   turnoffLEDs();
   delay(5000);
-  red_calibration_r1 = red_calibration_r1 + 180;
-  red_calibration_r2 = red_calibration_r2 - 22;
-  red_calibration_b1 = red_calibration_b1 + 250;
-  red_calibration_b2 = red_calibration_b2 - 22;
-  client.print("Red1: ");
-  client.println(red_calibration_r1);
-  client.print("Blue1: ");
-  client.println(red_calibration_b1);
-  client.print("Red2: ");
-  client.println(red_calibration_r2);
-  client.print("Blue2: ");
-  client.println(red_calibration_b2);
+  red_calibration_r1 = red_calibration_r1 - 80;
+  red_calibration_r2 = red_calibration_r2 - 60;
+  red_calibration_b1 = red_calibration_b1 - 80;
+  red_calibration_b2 = red_calibration_b2 - 60;
 
-  yellow_calibration_r1 = yellow_calibration_r1 + 168;
-  yellow_calibration_r2 = yellow_calibration_r2 - 30;
-  yellow_calibration_b1 = yellow_calibration_b1 + 230;
-  yellow_calibration_b2 = yellow_calibration_b2 - 30;
+  yellow_calibration_r1 = yellow_calibration_r1 - 80;
+  yellow_calibration_r2 = yellow_calibration_r2 - 60;
+  yellow_calibration_b1 = yellow_calibration_b1 - 80;
+  yellow_calibration_b2 = yellow_calibration_b2 - 60;
 
-  blue_calibration_r1 = blue_calibration_r1 + 185;
-  blue_calibration_r2 = blue_calibration_r2 - 20;
-  blue_calibration_b1 = blue_calibration_b1 + 220;
-  blue_calibration_b2 = blue_calibration_b2 - 20;
+  blue_calibration_r1 = blue_calibration_r1 - 80;
+  blue_calibration_r2 = blue_calibration_r2 - 60;
+  blue_calibration_b1 = blue_calibration_b1 - 80;
+  blue_calibration_b2 = blue_calibration_b2 - 60;
 
-  black_calibration_r1 = black_calibration_r1 + 185;
-  black_calibration_r2 = black_calibration_r2 - 20;
-  black_calibration_b1 = black_calibration_b1 + 220;
-  black_calibration_b2 = black_calibration_b2 - 20;
+  black_calibration_r1 = black_calibration_r1 - 80;
+  black_calibration_r2 = black_calibration_r2 - 60;
+  black_calibration_b1 = black_calibration_b1 - 80;
+  black_calibration_b2 = black_calibration_b2 - 60;
+
+  String message = "Red Color Calibration Value: \n";
+  String message_1 = "Red1: " + String(red_calibration_r1);
+  String message_2 = "Blue1: " + String(red_calibration_b1);
+  String message_3 = "Red2: " + String(red_calibration_r2);
+  String message_4 = "Blue2: " + String(red_calibration_b2);
+  sendMessage(message);
+  sendMessage(message_1);
+  sendMessage(message_2);
+  sendMessage(message_3);
+  sendMessage(message_4);
+
+  message = "Yellow Color Calibration Value: \n";
+  message_1 = "Red1: " + String(yellow_calibration_r1);
+  message_2 = "Blue1: " + String(yellow_calibration_b1);
+  message_3 = "Red2: " + String(yellow_calibration_r2);
+  message_4 = "Blue2: " + String(yellow_calibration_b2);
+  sendMessage(message);
+  sendMessage(message_1);
+  sendMessage(message_2);
+  sendMessage(message_3);
+  sendMessage(message_4);
+
+  message = "Blue Color Calibration Value: \n";
+  message_1 = "Red1: " + String(blue_calibration_r1);
+  message_2 = "Blue1: " + String(blue_calibration_b1);
+  message_3 = "Red2: " + String(blue_calibration_r2);
+  message_4 = "Blue2: " + String(blue_calibration_b2);
+  sendMessage(message);
+  sendMessage(message_1);
+  sendMessage(message_2);
+  sendMessage(message_3);
+  sendMessage(message_4);
+
+  message = "Black Color Calibration Value: \n";
+  message_1 = "Red1: " + String(black_calibration_r1);
+  message_2 = "Blue1: " + String(black_calibration_b1);
+  message_3 = "Red2: " + String(black_calibration_r2);
+  message_4 = "Blue2: " + String(black_calibration_b2);
+  sendMessage(message);
+  sendMessage(message_1);
+  sendMessage(message_2);
+  sendMessage(message_3);
+  sendMessage(message_4);
 }
 
 void calibrate_red() {
   turnoffLEDs();
+  avg_r1 = 0;
+  avg_r2 = 0;
+  avg_b1 = 0;
+  avg_b2 = 0;
 
-  turnonRed();
-  red_calibration_r1 = analogRead(pr1);
-  red_calibration_r1 = red_calibration_r1 - baseline_calibration_r1;
-  red_calibration_r2 = analogRead(pr2);
-  red_calibration_r2 = red_calibration_r2 - baseline_calibration_r2;
+  for (int i = 0; i < 5; i++) {
+    turnonRed();
+    red_calibration_r1 = analogRead(pr1);
+    red_calibration_r1 = red_calibration_r1 - baseline_calibration_r1;
+    red_calibration_r2 = analogRead(pr2);
+    red_calibration_r2 = red_calibration_r2 - baseline_calibration_r2;
 
-  turnonBlue();
-  red_calibration_b1 = analogRead(pr1);
-  red_calibration_b1 = red_calibration_b1 - baseline_calibration_b1;
-  red_calibration_b2 = analogRead(pr2);
-  red_calibration_b2 = red_calibration_b2 - baseline_calibration_b2;
+    turnonBlue();
+    red_calibration_b1 = analogRead(pr1);
+    red_calibration_b1 = red_calibration_b1 - baseline_calibration_b1;
+    red_calibration_b2 = analogRead(pr2);
+    red_calibration_b2 = red_calibration_b2 - baseline_calibration_b2;
+
+    avg_r1 += red_calibration_r1;
+    avg_r2 += red_calibration_r2;
+    avg_b1 += red_calibration_b1;
+    avg_b2 += red_calibration_b2;
+  }
+  red_calibration_r1 = avg_r1/5;
+  red_calibration_r2 = avg_r2/5;
+  red_calibration_b1 = avg_b1/5;
+  red_calibration_b2 = avg_b2/5;
 }
 
 void calibrate_yellow() {
   turnoffLEDs();
+  avg_r1 = 0;
+  avg_r2 = 0;
+  avg_b1 = 0;
+  avg_b2 = 0;
 
-  turnonRed();
-  yellow_calibration_r1 = analogRead(pr1);
-  yellow_calibration_r1 = yellow_calibration_r1 - baseline_calibration_r1;
-  yellow_calibration_r2 = analogRead(pr2);
-  yellow_calibration_r2 = yellow_calibration_r2 - baseline_calibration_r2;
+  for (int i = 0; i < 5; i++) {
+    turnonRed();
+    yellow_calibration_r1 = analogRead(pr1);
+    yellow_calibration_r1 = yellow_calibration_r1 - baseline_calibration_r1;
+    yellow_calibration_r2 = analogRead(pr2);
+    yellow_calibration_r2 = yellow_calibration_r2 - baseline_calibration_r2;
 
-  turnonBlue();
-  yellow_calibration_b1 = analogRead(pr1);
-  yellow_calibration_b1 = yellow_calibration_b1 - baseline_calibration_b1;
-  yellow_calibration_b2 = analogRead(pr2);
-  yellow_calibration_b2 = yellow_calibration_b2 - baseline_calibration_b2;
+    turnonBlue();
+    yellow_calibration_b1 = analogRead(pr1);
+    yellow_calibration_b1 = yellow_calibration_b1 - baseline_calibration_b1;
+    yellow_calibration_b2 = analogRead(pr2);
+    yellow_calibration_b2 = yellow_calibration_b2 - baseline_calibration_b2;
+
+    avg_r1 += yellow_calibration_r1;
+    avg_r2 += yellow_calibration_r2;
+    avg_b1 += yellow_calibration_b1;
+    avg_b2 += yellow_calibration_b2;
+  }
+  yellow_calibration_r1 = avg_r1/5;
+  yellow_calibration_r2 = avg_r2/5;
+  yellow_calibration_b1 = avg_b1/5;
+  yellow_calibration_b2 = avg_b2/5;
 }
 
 void calibrate_blue() {
   turnoffLEDs();
+  avg_r1 = 0;
+  avg_r2 = 0;
+  avg_b1 = 0;
+  avg_b2 = 0;
 
-  turnonRed();
-  blue_calibration_r1 = analogRead(pr1);
-  blue_calibration_r1 = blue_calibration_r1 - baseline_calibration_r1;
-  blue_calibration_r2 = analogRead(pr2);
-  blue_calibration_r2 = blue_calibration_r2 - baseline_calibration_r2;
+  for (int i = 0; i < 5; i++){
+    turnonRed();
+    blue_calibration_r1 = analogRead(pr1);
+    blue_calibration_r1 = blue_calibration_r1 - baseline_calibration_r1;
+    blue_calibration_r2 = analogRead(pr2);
+    blue_calibration_r2 = blue_calibration_r2 - baseline_calibration_r2;
 
-  turnonBlue();
-  blue_calibration_b1 = analogRead(pr1);
-  blue_calibration_b1 = blue_calibration_b1 - baseline_calibration_b1;
-  blue_calibration_b2 = analogRead(pr2);
-  blue_calibration_b2 = blue_calibration_b2 - baseline_calibration_b2;
+    turnonBlue();
+    blue_calibration_b1 = analogRead(pr1);
+    blue_calibration_b1 = blue_calibration_b1 - baseline_calibration_b1;
+    blue_calibration_b2 = analogRead(pr2);
+    blue_calibration_b2 = blue_calibration_b2 - baseline_calibration_b2;
+
+    avg_r1 += blue_calibration_r1;
+    avg_r2 += blue_calibration_r2;
+    avg_b1 += blue_calibration_b1;
+    avg_b2 += blue_calibration_b2;
+  }
+  blue_calibration_r1 = avg_r1/5;
+  blue_calibration_r2 = avg_r2/5;
+  blue_calibration_b1 = avg_b1/5;
+  blue_calibration_b2 = avg_b2/5;
 }
 
 void calibrate_black() {
   turnoffLEDs();
+  avg_r1 = 0;
+  avg_r2 = 0;
+  avg_b1 = 0;
+  avg_b2 = 0;
 
-  turnonRed();
-  black_calibration_r1 = analogRead(pr1);
-  black_calibration_r1 = black_calibration_r1 - baseline_calibration_r1;
-  black_calibration_r2 = analogRead(pr2);
-  black_calibration_r2 = black_calibration_r2 - baseline_calibration_r2;
+  for (int i = 0; i < 5; i++) {
+    turnonRed();
+    black_calibration_r1 = analogRead(pr1);
+    black_calibration_r1 = black_calibration_r1 - baseline_calibration_r1;
+    black_calibration_r2 = analogRead(pr2);
+    black_calibration_r2 = black_calibration_r2 - baseline_calibration_r2;
 
-  turnonBlue();
-  black_calibration_b1 = analogRead(pr1);
-  black_calibration_b1 = black_calibration_b1 - baseline_calibration_b1;
-  black_calibration_b2 = analogRead(pr2);
-  black_calibration_b2 = black_calibration_b2 - baseline_calibration_b2;
+    turnonBlue();
+    black_calibration_b1 = analogRead(pr1);
+    black_calibration_b1 = black_calibration_b1 - baseline_calibration_b1;
+    black_calibration_b2 = analogRead(pr2);
+    black_calibration_b2 = black_calibration_b2 - baseline_calibration_b2;
+
+    avg_r1 += black_calibration_r1;
+    avg_r2 += black_calibration_r2;
+    avg_b1 += black_calibration_b1;
+    avg_b2 += black_calibration_b2;
+  }
+  black_calibration_r1 = avg_r1/5;
+  black_calibration_r2 = avg_r2/5;
+  black_calibration_b1 = avg_b1/5;
+  black_calibration_b2 = avg_b2/5;
 }
 
 void turnoffLEDs() {
@@ -354,7 +457,7 @@ void turnoffLEDs() {
   digitalWrite(blue2, LOW);
   digitalWrite(red1, LOW);
   digitalWrite(red2, LOW);
-  delay(100);
+  delay(50);
 }
 
 void turnonRed() {
@@ -362,7 +465,7 @@ void turnonRed() {
   digitalWrite(blue2, LOW);
   digitalWrite(red1, HIGH);
   digitalWrite(red2, HIGH);
-  delay(100);
+  delay(50);
 }
 
 void turnonBlue() {
@@ -370,5 +473,5 @@ void turnonBlue() {
   digitalWrite(blue2, HIGH);
   digitalWrite(red1, LOW);
   digitalWrite(red2, LOW);
-  delay(100);
+  delay(50);
 }

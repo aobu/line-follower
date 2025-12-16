@@ -52,7 +52,7 @@ void bot_counterclockwise() {
 }
 
 void bot_turnLeft() {  
-  analogWrite(motor1_in1, 75);
+  analogWrite(motor1_in1, 50);
   analogWrite(motor1_in2, 0);
   // Motor 2
   analogWrite(motor2_in1, 0);
@@ -64,7 +64,7 @@ void bot_turnRight() {
   analogWrite(motor1_in2, 0);
   // Motor 2
   analogWrite(motor2_in1, 0);
-  analogWrite(motor2_in2, 75);
+  analogWrite(motor2_in2, 50);
 }
 
 

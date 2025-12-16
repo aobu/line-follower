@@ -36,20 +36,27 @@ void setup() {
   ensureWiFi();
   ensureWebSocket();
   delay(10);
-  // color_calibration();
+  color_calibration();
 
   // while 
   // bot_clockwise_90();
   // bot_forward(255);
   // delay(100);
   // bot_clockwise_90();
-  //base = ambientlight_store();
+  // base = ambientlight_store();
   // run_solo();
 }
 
 void loop() {
-  readWebSocket();
-  //follow_lane(1);
+  // readWebSocket();
+  follow_lane(1);
+  // bot_forward(50);
+  // delay(1000);
+  // bot_turnLeft();
+  // delay(1000);
+  // bot_turnRight();
+  // delay(1000);
+  // delay(1000);
   //bot_forward(255);
   //check_wall(base);
   //follow_lane(1);

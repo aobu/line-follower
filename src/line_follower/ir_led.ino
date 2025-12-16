@@ -24,7 +24,7 @@ bool check_wall(int ambient) {
   int adj_avg = avg-ambient;
   Serial.println(String(adj_avg)+ ", " + String(ambient));
 
-  if (adj_avg > -10) {
+  if (adj_avg > -40) {
     //bot_forward(200);
     return false;
   }
