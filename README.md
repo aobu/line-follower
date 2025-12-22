@@ -38,7 +38,7 @@ ir_led.ino:
   - Takes into account ambient IR light
 
 battery_monitor.ino:
-  - Check's the Arduno and Motor's 9V batteries for their voltage level and turns a Red LED on if they go below 3.7V
+  - Check's the Arduno and Motor's 9V batteries for their voltage level and turns a Red LED on if they go below 7.4 V
 
 
   
